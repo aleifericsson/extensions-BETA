@@ -31,8 +31,8 @@ function moveFilesToDist() {
     fs.renameSync(tempFilePath, distFilePath); // Move files
 })
   
-let sourceFilePath = path.resolve(__dirname, 'dist-temp/index.html');
-let destinationFilePath = path.resolve(__dirname, 'dist/index.html');
+let sourceFilePath = path.resolve(__dirname, 'dist-temp/L.html');
+let destinationFilePath = path.resolve(__dirname, 'dist/L.html');
 
 fs.renameSync(sourceFilePath, destinationFilePath);
 
@@ -80,14 +80,14 @@ export default defineConfig(({ mode }) => {
       outDir: isTempBuild ? 'dist-temp' : 'dist', // Build to dist-temp for second build
       rollupOptions: isTempBuild ? {
         input: {
-          content: path.resolve(__dirname, 'index.html'),
+          content: path.resolve(__dirname, 'L.html'),
         },
         output: {
           entryFileNames: 'assets/[name].[hash].js',
           assetFileNames: 'assets/[name].[hash].[ext]',
         },}: {
           input: {
-            setting: path.resolve(__dirname, 'L.html'),
+            setting: path.resolve(__dirname, 'index.html'),
           },
           output: {
             entryFileNames: 'assets/[name].[hash].js',
