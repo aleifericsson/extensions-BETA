@@ -1,10 +1,14 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { viteStaticCopy } from 'vite-plugin-static-copy';
 import fs from 'fs';
 import path from 'path';
 
-// Function to update the manifest with the correct hashed content script filename
+
+const distTempPath = path.resolve(__dirname, 'dist-temp');
+const distPath = path.resolve(__dirname, 'dist');
+const distTempAssets = path.resolve(__dirname, 'dist-temp/assets');
+const distAssets = path.resolve(__dirname, 'dist/assets');
+
 function updateManifest(contentScriptFileName) {
   const manifestPath = path.resolve(__dirname, 'public/manifest.json');
   const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
@@ -17,46 +21,80 @@ function updateManifest(contentScriptFileName) {
   fs.writeFileSync(path.resolve(__dirname, 'dist/manifest.json'), JSON.stringify(manifest, null, 2));
 }
 
-// Vite configuration
+// Function to copy all files from dist-temp to dist
+function moveFilesToDist() {
+  // Read files from dist-temp and move to dist
+  let files = fs.readdirSync(distTempAssets);
+  files.forEach((file) => {
+    const tempFilePath = path.join(distTempAssets, file);
+    const distFilePath = path.join(distAssets, file);
+    fs.renameSync(tempFilePath, distFilePath); // Move files
+})
+  
+let sourceFilePath = path.resolve(__dirname, 'dist-temp/index.html');
+let destinationFilePath = path.resolve(__dirname, 'dist/index.html');
+
+fs.renameSync(sourceFilePath, destinationFilePath);
+
+  files = fs.readdirSync(path.resolve(__dirname, 'dist/assets'));
+  const contentScriptFile = files.find(file => file.startsWith('content') && file.endsWith('.js'));
+  if (contentScriptFile) {
+    updateManifest(contentScriptFile); // Update the manifest.json
+  }
+}
+
+function delDistTemp() {
+  // Check if the folder exists
+  if (fs.existsSync(distTempPath)) {
+    // Read all the files and subdirectories within dist-temp
+    fs.readdirSync(distTempPath).forEach(file => {
+      const filePath = path.join(distTempPath, file);
+      // Remove each file or folder inside dist-temp recursively
+      fs.rmSync(filePath, { recursive: true, force: true });
+    });
+  } else {
+    // Create the folder if it doesn't exist
+    fs.mkdirSync(distTempPath);
+  }
+}
+
 export default defineConfig(({ mode }) => {
-  const isContentBuild = mode === 'content';
-  const input = isContentBuild
-    ? { content: path.resolve(__dirname, 'L.html') }
-    : { settings: path.resolve(__dirname, 'index.html') };
+  
+  const isTempBuild = mode === 'content'; // Check if it's the second build
 
   return {
     plugins: [
       react(),
-      viteStaticCopy({
-        targets: [
-          {
-            src: 'public/manifest.json',
-            dest: '.', // Copy to the root of dist
-          },
-        ],
-      }),
       {
-        name: 'update-manifest', // Custom plugin to update the manifest.json
-        closeBundle() {
-          const files = fs.readdirSync(path.resolve(__dirname, 'dist/assets'));
-          const contentScriptFile = files.find(file => file.startsWith('content') && file.endsWith('.js'));
-
-          if (contentScriptFile && isContentBuild) {
-            updateManifest(contentScriptFile); // Update the manifest.json
-          }
-        },
-      }
+        name: 'move-files-plugin',
+         closeBundle() {
+            if (isTempBuild) {
+              moveFilesToDist(); // Move files after second build
+            } else {
+              delDistTemp(); // Clean dist-temp after first build
+            }
+        }
+      },
     ],
     build: {
-      rollupOptions: {
-        input, // Conditionally use content or settings as the entry point
+      outDir: isTempBuild ? 'dist-temp' : 'dist', // Build to dist-temp for second build
+      rollupOptions: isTempBuild ? {
+        input: {
+          content: path.resolve(__dirname, 'index.html'),
+        },
         output: {
           entryFileNames: 'assets/[name].[hash].js',
           assetFileNames: 'assets/[name].[hash].[ext]',
-          chunkFileNames: 'assets/[name].[hash].js',
+        },}: {
+          input: {
+            setting: path.resolve(__dirname, 'L.html'),
+          },
+          output: {
+            entryFileNames: 'assets/[name].[hash].js',
+            assetFileNames: 'assets/[name].[hash].[ext]',
+          },
         },
-      },
-      outDir: 'dist',
-    }
+      emptyOutDir: isTempBuild ? false : true, // Only empty outDir for the first build
+    },
   };
 });

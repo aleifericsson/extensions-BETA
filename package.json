@@ -7,9 +7,9 @@
     "dev": "vite",
     "lint": "eslint .",
     "preview": "vite preview",
-    "build1": "vite build --mode content",
-    "build2": "vite build --mode settings",
-    "build": "npm run build2 && npm run build1"
+    "build1": "vite build --mode settings",
+    "build2": "vite build --mode content",
+    "build": "npm run build1 && npm run build2"
   },
   "dependencies": {
     "concurrently": "^9.0.1",
