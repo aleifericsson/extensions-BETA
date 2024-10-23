@@ -22,12 +22,6 @@ function removeReact(){
   }
 }
 
-function sendMessage(message){
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, message);
-});
-}
-
 function generateRoot(){  
   const rot = create("div")
   addClasses(rot, ["react-root","plus-ample"])
@@ -35,4 +29,4 @@ function generateRoot(){
 }
 
 
-export {injectReact, sendMessage, removeReact, generateRoot}
+export {injectReact, removeReact, generateRoot}

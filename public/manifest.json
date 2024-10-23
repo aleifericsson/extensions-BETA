@@ -19,7 +19,7 @@
       "https://*/*"
     ], 
     "web_accessible_resources": [{
-      "resources": ["images/close.png"],
+      "resources": ["content/content-script.js","images/close.png"],
       "matches": ["<all_urls>"]
     }],
     "content_scripts": [
