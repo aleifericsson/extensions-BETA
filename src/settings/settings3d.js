@@ -1,14 +1,14 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { render, addClass } from './qol';
+import { render, addClass } from '../content/qol';
 
 let rendele
 let scene
 let camera
 let renderer
 
-export default function do3d(){
+export default function settings3d(){
     console.log("3d yeah")
 
     create_3d()
@@ -29,7 +29,7 @@ function create_3d(){
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
     renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth/1.2, window.innerHeight/1.2 );
+    renderer.setSize( 200, 200);
     rendele = renderer.domElement
     render(document.body, rendele);
     addClass(rendele, "3d")
