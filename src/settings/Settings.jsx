@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { sendMessage } from "./settings-qol.jsx";
+import { sendMessage } from "../content/ext-qol";
 import './Settings.css'
 
 export default function Settings({props}){

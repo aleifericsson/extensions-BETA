@@ -1,5 +1,5 @@
 import { render } from "./content/qol.js";
-import { generateRoot, injectReact } from "./content/ext-qol.jsx";
+import { generateRoot, injectReact, removeReact } from "./content/ext-qol.jsx";
 import Popup from "./content/Popup.jsx";
 
 console.log("bruh")

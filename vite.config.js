@@ -16,6 +16,16 @@ function updateManifest(contentScriptFileName) {
   // Update the content script with the correct hashed filename
   manifest.content_scripts[0].js = [`assets/${contentScriptFileName}`];
   manifest.web_accessible_resources[0].resources[0] = `assets/${contentScriptFileName}`;
+  fs.writeFileSync(path.resolve(__dirname, 'public/manifest.json'), JSON.stringify(manifest, null, 2));
+}
+
+function updateManifest2(contentScriptFileName) {
+  const manifestPath = path.resolve(__dirname, 'public/manifest.json');
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+
+  // Update the content script with the correct hashed filename
+  manifest.content_scripts[0].css = [`assets/${contentScriptFileName}`];
+  manifest.web_accessible_resources[0].resources[1] = `assets/${contentScriptFileName}`;
 
   // Write the updated manifest back to the dist folder
   fs.writeFileSync(path.resolve(__dirname, 'dist/manifest.json'), JSON.stringify(manifest, null, 2));
@@ -40,6 +50,10 @@ fs.renameSync(sourceFilePath, destinationFilePath);
   const contentScriptFile = files.find(file => file.startsWith('content') && file.endsWith('.js'));
   if (contentScriptFile) {
     updateManifest(contentScriptFile); // Update the manifest.json
+  }
+  const contentScriptFile2 = files.find(file => file.startsWith('content') && file.endsWith('.css'));
+  if (contentScriptFile2) {
+    updateManifest2(contentScriptFile2); // Update the manifest.json
   }
 }
 
