@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { sendMessage } from "../content/ext-qol";
 import './Settings.css'
+import { sendMessage } from "../content/message.js";
 
 export default function Settings({props}){
     const [popup_visible, set_visible] = useState(false);
