@@ -20,7 +20,7 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "assets/content.BaQG3wnH.js",
+        "assets/content.C8KYmIgg.js",
         "content/style.css",
         "images/close.png"
       ],
@@ -32,7 +32,7 @@
   "content_scripts": [
     {
       "js": [
-        "assets/content.BaQG3wnH.js"
+        "assets/content.C8KYmIgg.js"
       ],
       "matches": [
         "http://*/*",

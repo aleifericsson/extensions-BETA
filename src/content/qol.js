@@ -96,6 +96,11 @@ const getPos = (evt, myrect) =>{
     return mousePos
 }
 
+const getRect = (myrect) => {
+    //properties: top/bottom, left/right, height/width, x/y
+    return myrect.getBoundingClientRect();
+}
+
 
 const checkCollision = (thing1, thing2) => {
     if (thing1 === null || thing2 === null){
@@ -154,4 +159,4 @@ const getPosEle = (element, size) => {
     }
 }
 
-export {render, remove, create, addClass, addClasses,remClasses, hasClass, remClass, find, findAll, write, read, detect, undetect, style, attribs, isElement, moveTo}
+export {render, remove, create, addClass, addClasses,remClasses, hasClass, remClass, find, findAll, write, read, detect, undetect, style, attribs, isElement, moveTo, getPos, getRect}
