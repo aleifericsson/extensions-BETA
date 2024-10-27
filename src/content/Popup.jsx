@@ -48,7 +48,7 @@ export default function Popup({props}){ //props: {startx, starty}
         e.preventDefault();
         const rect = getRect(find(".popup.alfa"))
         setX(e.pageX)
-        setY(e.pageY + rect.height/2)
+        setY(e.pageY + rect.height/2) //it's + so that the popup moves down onto the mouse duh
     }
     const stopDrag = (e) => {
         e.preventDefault();

@@ -1,5 +1,5 @@
-import { render } from "./content/qol.js";
-import { generateRoot, injectReact, removeReact } from "./content/ext-qol.jsx";
+import { detect, render } from "./content/qol.js";
+import { generateRoot, injectReact, isRendered, removeReact } from "./content/ext-qol.jsx";
 import Popup from "./content/Popup.jsx";
 
 console.log("bruh")
@@ -16,6 +16,19 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
         }
         else{
             removeReact()
+        }
+    }
+    if (message.message == "toggle_detection"){ //{message, detecting}  
+        const popup_detect = (e) => {
+            if (e.key === "p") {
+                isRendered() ? removeReact() : injectReact(Popup, root,{startx:popup_pos.x,starty:popup_pos.y})
+            }
+        }
+        if(message.detecting){
+            detect(document, "keydown", popup_detect)
+        }
+        else{
+            undetect(document, "keydown", popup_detect)
         }
     }
 });

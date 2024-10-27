@@ -28,10 +28,27 @@ function generateRoot(){
   return rot
 }
 
+function isRendered(){
+  return root_render ? true : false
+}
+
 function sendMessage(message){
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     chrome.tabs.sendMessage(tabs[0].id, message);
 });
 }
 
-export {injectReact, removeReact, generateRoot, sendMessage}
+const setStore = (key_obj) => { //key_obj example: {detecting: false}
+    chrome.storage.local.set(key_obj).then(() => {
+        //console.log("Value is set");
+    });    
+}
+
+const getStore = (key) =>{ //key example: "detecting"
+    chrome.storage.local.get([key]).then((result) => {
+        //console.log("Value currently is " + result.key);
+    });
+}
+
+
+export {injectReact, removeReact, generateRoot, sendMessage, isRendered, setStore, getStore}
