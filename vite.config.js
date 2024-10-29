@@ -39,12 +39,12 @@ function moveFilesToDist() {
     const tempFilePath = path.join(distTempAssets, file);
     const distFilePath = path.join(distAssets, file);
     fs.renameSync(tempFilePath, distFilePath); // Move files
-})
-  
-let sourceFilePath = path.resolve(__dirname, 'dist-temp/L.html');
-let destinationFilePath = path.resolve(__dirname, 'dist/L.html');
+  })
+    
+  let sourceFilePath = path.resolve(__dirname, 'dist-temp/L.html');
+  let destinationFilePath = path.resolve(__dirname, 'dist/L.html');
 
-fs.renameSync(sourceFilePath, destinationFilePath);
+  fs.renameSync(sourceFilePath, destinationFilePath);
 
   files = fs.readdirSync(path.resolve(__dirname, 'dist/assets'));
   const contentScriptFile = files.find(file => file.startsWith('content') && file.endsWith('.js'));

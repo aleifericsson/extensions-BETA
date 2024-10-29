@@ -1,4 +1,4 @@
-import { injectReact, isRendered, removeReact } from "./ext-qol";
+import { getRoot, injectReact, isRendered, removeReact } from "./ext-qol";
 import Popup from "./Popup.jsx";
 import { detect, undetect } from "./qol";
 
@@ -10,15 +10,17 @@ const setStore = (key_obj) => { //key_obj example: {detecting: false}
     });    
 }
 
-const getStore = (key) =>{ //key example: ["detecting"]
-    return new Promise(resolve => {
-        chrome.storage.local.get(key).then((result) => {
-            resolve(result.key)
-            //console.log("Value currently is " + result.key);
+const getStore = ([keys]) => { // key example: "detecting"
+    return new Promise((resolve, reject) => {
+        chrome.storage.local.get(keys, (results) => {
+            if (chrome.runtime.lastError) {
+                reject(chrome.runtime.lastError); // In case of an error
+            } else {
+                resolve(results); // Return the value for the key
+            }
         });
-    })
-}
-
+    });
+};
 
 const popup_detect = (e) => {
     if (e.key === "p") {
@@ -26,14 +28,31 @@ const popup_detect = (e) => {
     }
 }
 
-const updateSettings = () => {
-    console.log("stor")
-    getStore({detecting:''}).then((result) => {  
-        console.log(result)
-        if (result !== undefined){
-            result ? detect(document, "keydown", popup_detect) : undetect(document, "keydown", popup_detect)
+const updateSettingsToContent = () => {
+    getStore(["detecting"]).then((result) => {  
+        const detecting = result.detecting
+        if (detecting !== undefined && detecting !== null) {
+            detecting ? detect(document, "keydown", popup_detect) : undetect(document, "keydown", popup_detect);
+        } else {
+            console.log("Key 'detecting' is not set in storage.");
         }
-    })
-}
+    }).catch((error) => {
+        console.error("Error accessing storage:", error);
+    });
+};
 
-export {setStore, getStore, updateSettings}
+
+const updateStorageToSettings = () => {
+    
+    return getStore(["detecting", "popup_showing"])
+        .then((result) => {
+            return result;  // Result will contain the retrieved values
+        })
+        .catch((error) => {
+            console.error("Error accessing storage:", error);
+            return {}; // Return an empty object on error
+        });
+        
+};
+
+export {setStore, getStore, updateSettingsToContent, updateStorageToSettings}

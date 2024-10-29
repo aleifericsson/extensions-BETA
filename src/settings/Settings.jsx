@@ -1,10 +1,22 @@
 import { useState } from "react";
 import './Settings.css'
 import { sendMessage } from "../content/message.js";
+import { updateStorageToSettings } from "../content/storage.js";
+
+
 
 export default function Settings({props}){
-    const [popup_visible, set_visible] = useState(false);
-    const [detecting, set_detecting] = useState(false);
+    let temp = false
+    const all_settings = updateStorageToSettings()
+    console.log(all_settings)
+    if (all_settings.popup_visible !== undefined && all_settings.popup_visible !== null) {
+        temp = all_settings.popup_visible
+    }
+    const [popup_visible, set_visible] = useState(temp);
+    if (all_settings.detecting !== undefined && all_settings.detecting !== null) {
+        temp = all_settings.detecting
+    }
+    const [detecting, set_detecting] = useState(temp);
     
     const togglePopup = (event) => {
         set_visible(!popup_visible)

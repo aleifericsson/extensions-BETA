@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { addClass, addClasses, create, write } from './qol.js';
 
 let root_render = null
+let root = null
 
 function injectReact(Component, root_ele, props={}) {
     if (!root_render){
@@ -25,6 +26,7 @@ function removeReact(){
 function generateRoot(){  
   const rot = create("div")
   addClasses(rot, ["react-root","plus-ample"])
+  root = rot
   return rot
 }
 
@@ -33,7 +35,7 @@ function isRendered(){
 }
 
 function getRoot(){
-  return find(document.body, ".react-root.plus-ample")
+  return root
 }
 
 
