@@ -10,9 +10,9 @@ const setStore = (key_obj) => { //key_obj example: {detecting: false}
     });    
 }
 
-const getStore = ([keys]) => { // key example: "detecting"
+const getStore = (key) => { // key example: "detecting"
     return new Promise((resolve, reject) => {
-        chrome.storage.local.get(keys, (results) => {
+        chrome.storage.local.get(key, (results) => {
             if (chrome.runtime.lastError) {
                 reject(chrome.runtime.lastError); // In case of an error
             } else {
@@ -24,7 +24,13 @@ const getStore = ([keys]) => { // key example: "detecting"
 
 const popup_detect = (e) => {
     if (e.key === "p") {
-        isRendered() ? removeReact() : injectReact(Popup, getRoot(),{startx:popup_pos.x,starty:popup_pos.y})
+        if (isRendered()){
+            removeReact()
+            setStore({"popupVisible":false})
+        } else{
+            injectReact(Popup, getRoot(),{startx:popup_pos.x,starty:popup_pos.y})
+            setStore({"popupVisible":true})
+        }
     }
 }
 
@@ -42,9 +48,9 @@ const updateSettingsToContent = () => {
 };
 
 
-const updateStorageToSettings = () => {
+const getAllStorage = () => {
     
-    return getStore(["detecting", "popup_showing"])
+    return getStore({"popupVisible":"","detecting":""}) //currently all storage
         .then((result) => {
             return result;  // Result will contain the retrieved values
         })
@@ -55,4 +61,4 @@ const updateStorageToSettings = () => {
         
 };
 
-export {setStore, getStore, updateSettingsToContent, updateStorageToSettings}
+export {setStore, getStore, updateSettingsToContent, getAllStorage}

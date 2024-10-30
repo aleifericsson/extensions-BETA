@@ -14,13 +14,12 @@ const handleMessages = () => {
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     if (message.message == "toggle_popup"){ //{message, popup_visible}
         if(message.popup_visible){
-            console.log(getRoot())
             injectReact(Popup, getRoot(),{startx:popup_pos.x,starty:popup_pos.y})
-            setStore({"popup_showing":true})
+            setStore({"popupVisible":true})
         }
         else{
             removeReact()
-            setStore({"popup_showing":false})
+            setStore({"popupVisible":false})
         }
     }
     if (message.message == "toggle_detection"){ //{message, detecting}  

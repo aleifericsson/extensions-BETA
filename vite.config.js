@@ -84,6 +84,7 @@ export default defineConfig(({ mode }) => {
          closeBundle() {
             if (isTempBuild) {
               moveFilesToDist(); // Move files after second build
+              console.log('\x1b[32m✓\x1b[35m files moved to dist!\x1b[0m');
             } else {
               delDistTemp(); // Clean dist-temp after first build
             }
@@ -91,6 +92,7 @@ export default defineConfig(({ mode }) => {
       },
     ],
     build: {
+      chunkSizeWarningLimit: 1000,
       outDir: isTempBuild ? 'dist-temp' : 'dist', // Build to dist-temp for second build
       rollupOptions: isTempBuild ? {
         input: {

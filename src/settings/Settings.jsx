@@ -1,23 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import './Settings.css'
 import { sendMessage } from "../content/message.js";
-import { updateStorageToSettings } from "../content/storage.js";
+import { getAllStorage } from "../content/storage.js";
 
 
 
 export default function Settings({props}){
-    let temp = false
-    const all_settings = updateStorageToSettings()
-    console.log(all_settings)
-    if (all_settings.popup_visible !== undefined && all_settings.popup_visible !== null) {
-        temp = all_settings.popup_visible
-    }
-    const [popup_visible, set_visible] = useState(temp);
-    if (all_settings.detecting !== undefined && all_settings.detecting !== null) {
-        temp = all_settings.detecting
-    }
-    const [detecting, set_detecting] = useState(temp);
-    
+    const [popup_visible, set_visible] = useState(false); // Default to false
+    const [detecting, set_detecting] = useState(false);   // Default to false
+
     const togglePopup = (event) => {
         set_visible(!popup_visible)
         sendMessage({message:"toggle_popup", popup_visible: !popup_visible })
@@ -26,6 +17,19 @@ export default function Settings({props}){
         set_detecting(!detecting)
         sendMessage({message:"toggle_detection", detecting: !detecting })
     }
+
+    useEffect(() => {
+        const loadSettings = async () => {
+            const all_settings = await getAllStorage();
+            if (all_settings.popupVisible !== undefined) {
+                set_visible(all_settings.popupVisible);
+            }
+            if (all_settings.detecting !== undefined) {
+                set_detecting(all_settings.detecting);
+            }
+        };
+        loadSettings();
+    }, []); // Empty dependency array ensures this runs once on mount
 
     return(
         <>

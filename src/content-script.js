@@ -1,7 +1,8 @@
 import { render } from "./content/qol.js";
-import { generateRoot } from "./content/ext-qol.jsx";
+import { generateRoot, injectReact } from "./content/ext-qol.jsx";
 import { handleMessages } from "./content/message.js";
-import { updateSettingsToContent } from "./content/storage.js";
+import { getAllStorage, updateSettingsToContent } from "./content/storage.js";
+import Popup from "./content/Popup.jsx";
 
 console.log("bruh")
 
@@ -10,3 +11,8 @@ render(document.body, root)
 
 updateSettingsToContent()
 handleMessages()
+
+getAllStorage().then((result) =>{
+    if (result.popupVisible) {injectReact(Popup, root,{startx:300,starty:500})}
+})
+
