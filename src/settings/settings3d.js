@@ -29,7 +29,7 @@ function create_3d(){
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
     renderer = new THREE.WebGLRenderer();
-    renderer.setSize( 200, 200);
+    renderer.setSize( 300, 200);
     rendele = renderer.domElement
     render(document.body, rendele);
     addClass(rendele, "3d")
@@ -39,7 +39,7 @@ function create_3d(){
 
 function make_cube(){
     const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    const material = new THREE.MeshBasicMaterial( { color: 0x24394D } );
+    const material = new THREE.MeshStandardMaterial( { color: 0x24394D } );
     const cube = new THREE.Mesh( geometry, material );
     cube.position.x = 2
     scene.add( cube );

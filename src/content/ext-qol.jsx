@@ -38,5 +38,9 @@ function getRoot(){
   return root
 }
 
+function isDevMode(){
+  if (import.meta.env.MODE === 'development') return true
+  else return false
+}
 
-export {injectReact, removeReact, generateRoot, isRendered, getRoot}
+export {injectReact, removeReact, generateRoot, isRendered, getRoot, isDevMode}
