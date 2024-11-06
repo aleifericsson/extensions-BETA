@@ -32,7 +32,7 @@ export default function Settings({props}){
     }, []); // Empty dependency array ensures this runs once on mount
 
     return(
-        <>
+        <div className="settings">
             <div className="toggle-box">
                 <input
                     type="checkbox"
@@ -55,6 +55,6 @@ export default function Settings({props}){
                 <label className="switch" htmlFor="detect"></label>
                 <div>{"Detect Popup? (Press P)"}</div>
             </div>
-        </>
+        </div>
     )
 }

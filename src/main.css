@@ -1,9 +1,14 @@
 #root {
-  max-width: 300px;
-  max-height: 200px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  z-index: 2;
+  position:relative;
+}
+
+body{
+  min-width: 300px;
+  min-height: 200px;
 }
 
 .logo {
@@ -52,4 +57,8 @@ canvas{
   position:fixed;
   top: 0;
   left: 0;
+}
+
+.fiber{
+  background-color: white;
 }

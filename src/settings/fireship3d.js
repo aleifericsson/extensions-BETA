@@ -1,17 +1,20 @@
 import { find } from '../content/qol';
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
+import { isDevMode } from '../content/ext-qol';
 //import space from 'images/space.jpg'
 
 export default function fireship3d(){
     //components of all 3js: scene (container), camera, renderer
+    console.log(window.innerHeight, window.innerWidth)
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+    const dimensions = isDevMode() ? 300/200:window.innerWidth / window.innerHeight
+    const camera = new THREE.PerspectiveCamera(75, dimensions, 0.1, 1000)
     const renderer = new THREE.WebGLRenderer({
         canvas: find("#bg")
     })
     renderer.setPixelRatio (window.devicePixelRatio)
-    renderer.setSize( window.innerWidth, window.innerHeight);
+    isDevMode ? renderer.setSize( 300,200) :renderer.setSize( window.innerWidth, window.innerHeight);
     camera.position.setZ(30)
     
     renderer.render(scene,camera)
@@ -44,13 +47,13 @@ export default function fireship3d(){
         const material = new THREE.MeshBasicMaterial({color:0xffffff})
         const star = new THREE.Mesh(geometry, material);
 
-        const [x, y, z] = Array(3).fill().map(()=> THREE.MathUtils.randFloatSpread(200))
+        const [x, y, z] = Array(3).fill(0).map(()=> THREE.MathUtils.randFloatSpread(200))
         
         star.position.set(x,y,z);
         scene.add(star)
     }
 
-    Array(200).fill().forEach(()=>addStar())
+    Array(200).fill(0).forEach(()=>addStar())
 
     const spaceTexture = new THREE.TextureLoader().load('/images/space.jpg')
     scene.background = spaceTexture
